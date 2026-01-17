@@ -376,12 +376,18 @@ void Engine::onClockMidi(uint8_t data) {
 }
 
 void Engine::updateTrackSetups() {
+    // check if track setup was requested (e.g., after loading a new project)
+    bool forceRebuild = _requestTrackSetup != 0;
+    if (forceRebuild) {
+        _requestTrackSetup = 0;
+    }
+
     for (int trackIndex = 0; trackIndex < CONFIG_TRACK_COUNT; ++trackIndex) {
         auto &track = _project.track(trackIndex);
         int linkTrack = track.linkTrack();
         const TrackEngine *linkedTrackEngine = linkTrack >= 0 ? &trackEngine(linkTrack) : nullptr;
 
-        if (!_trackEngines[trackIndex] || _trackEngines[trackIndex]->trackMode() != track.trackMode()) {
+        if (forceRebuild || !_trackEngines[trackIndex] || _trackEngines[trackIndex]->trackMode() != track.trackMode()) {
             auto &trackEngine = _trackEngines[trackIndex];
             auto &trackContainer = _trackEngineContainers[trackIndex];
 

@@ -197,7 +197,7 @@ void ProjectPage::saveProjectToSlot(int slot) {
 }
 
 void ProjectPage::loadProjectFromSlot(int slot) {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("LOADING PROJECT ...");
 
     FileManager::task([this, slot] () {
@@ -206,6 +206,7 @@ void ProjectPage::loadProjectFromSlot(int slot) {
     }, [this] (fs::Error result) {
         if (result == fs::OK) {
             showMessage("PROJECT LOADED");
+            _engine.requestTrackSetup();
         } else if (result == fs::INVALID_CHECKSUM) {
             showMessage("INVALID PROJECT FILE");
         } else {

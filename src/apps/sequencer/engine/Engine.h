@@ -76,6 +76,9 @@ public:
     void resume();
     bool isSuspended() const { return _suspended; }
 
+    // request track engines to be rebuilt (used after loading a new project)
+    void requestTrackSetup() { _requestTrackSetup = 1; }
+
     // clock control
     void togglePlay(bool shift = false);
     void clockStart();
@@ -217,6 +220,9 @@ private:
     volatile uint32_t _requestSuspend = 0;
     volatile uint32_t _suspended = 0;
     volatile uint32_t _suspendStopClock = 1;
+
+    // track setup request (forces track engines rebuild)
+    volatile uint32_t _requestTrackSetup = 0;
 
     uint32_t _tick = 0;
 
