@@ -171,7 +171,7 @@ void UserScalePage::saveUserScale() {
 }
 
 void UserScalePage::saveUserScaleToSlot(int slot) {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("SAVING USER SCALE ...");
 
     FileManager::task([this, slot] () {
@@ -189,7 +189,7 @@ void UserScalePage::saveUserScaleToSlot(int slot) {
 }
 
 void UserScalePage::loadUserScaleFromSlot(int slot) {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("LOADING USER SCALE ...");
 
     FileManager::task([this, slot] () {

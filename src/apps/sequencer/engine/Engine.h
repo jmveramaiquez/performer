@@ -70,7 +70,9 @@ public:
 
     // suspending temporarily puts the engine in a state where it only processes basic events but skips all updates
     // suspending can be used during longer periods of time (e.g. file operations)
-    void suspend();
+    // if stopClock is true (default), the clock is stopped when suspending
+    // if stopClock is false, the clock continues running (useful for save operations)
+    void suspend(bool stopClock = true);
     void resume();
     bool isSuspended() const { return _suspended; }
 
@@ -214,6 +216,7 @@ private:
     // suspending
     volatile uint32_t _requestSuspend = 0;
     volatile uint32_t _suspended = 0;
+    volatile uint32_t _suspendStopClock = 1;
 
     uint32_t _tick = 0;
 

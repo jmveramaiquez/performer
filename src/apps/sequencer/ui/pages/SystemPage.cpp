@@ -326,7 +326,7 @@ void SystemPage::restoreSettings() {
 }
 
 void SystemPage::saveSettingsToFlash() {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("SAVING SETTINGS ...");
 
     FileManager::task([this] () {
@@ -341,7 +341,7 @@ void SystemPage::saveSettingsToFlash() {
 }
 
 void SystemPage::backupSettingsToFile() {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("BACKING UP SETTINGS ...");
 
     FileManager::task([this] () {
@@ -359,7 +359,7 @@ void SystemPage::backupSettingsToFile() {
 }
 
 void SystemPage::restoreSettingsFromFile() {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("RESTORING SETTINGS ...");
 
     FileManager::task([this] () {

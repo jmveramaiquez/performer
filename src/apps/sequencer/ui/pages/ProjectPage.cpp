@@ -179,7 +179,7 @@ void ProjectPage::initRoute() {
 }
 
 void ProjectPage::saveProjectToSlot(int slot) {
-    _engine.suspend();
+    _engine.suspend(false);
     _manager.pages().busy.show("SAVING PROJECT ...");
 
     FileManager::task([this, slot] () {

@@ -58,28 +58,31 @@ void Engine::update() {
 
     // suspending
     if (_requestSuspend != _suspended) {
-        if (_requestSuspend) {
+        if (_requestSuspend && _suspendStopClock) {
             _clock.masterStop();
         }
         _suspended = _requestSuspend;
     }
 
     if (_suspended) {
-        // consume ticks
-        uint32_t tick;
-        while (_clock.checkTick(&tick)) {}
+        if (_suspendStopClock) {
+            // clock stopped: consume ticks without processing
+            uint32_t tick;
+            while (_clock.checkTick(&tick)) {}
 
-        // consume midi events
-        uint8_t cable;
-        MidiMessage message;
-        while (_midi.recv(&message)) {}
-        while (_usbMidi.recv(&cable, &message)) {}
+            // consume midi events
+            uint8_t cable;
+            MidiMessage message;
+            while (_midi.recv(&message)) {}
+            while (_usbMidi.recv(&cable, &message)) {}
 
-        _cvInput.update();
-        updateOverrides();
-        _cvOutput.update();
-        _gateOutput.update();
-        return;
+            _cvInput.update();
+            updateOverrides();
+            _cvOutput.update();
+            _gateOutput.update();
+            return;
+        }
+        // clock running: continue processing below (for save operations)
     }
 
     // process clock events
@@ -186,8 +189,9 @@ void Engine::unlock() {
     }
 }
 
-void Engine::suspend() {
+void Engine::suspend(bool stopClock) {
     // TODO make re-entrant
+    _suspendStopClock = stopClock ? 1 : 0;
     while (!isSuspended()) {
         _requestSuspend = 1;
 #ifdef PLATFORM_SIM
