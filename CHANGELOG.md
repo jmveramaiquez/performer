@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.1.43 (4 March 2026)
+
+- When saving a project, user scale, or settings, the sequencer will now continue running without interruption.
+
+- When loading a project: The clock keeps running during the loading process, and once completed, the track engines are cleanly rebuilt with the new project data.
+
+**Operations that NO longer stop the sequencer:**
+
+    - Save project
+    - Load project
+    - Save user scale
+    - Load user scale
+
+**Operations that STILL stop the sequencer:**
+
+    - Save settings
+    - Backup settings
+    - Restore settings
+    - Initialize project
+    - Enter CV calibration
+    - Game mode
+
 ## v0.1.42 (6 June 2022)
 
 #### Fixes
